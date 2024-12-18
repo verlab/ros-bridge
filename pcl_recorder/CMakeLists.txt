@@ -2,6 +2,8 @@ cmake_minimum_required(VERSION 3.3)
 project(pcl_recorder)
 
 find_package(ros_environment REQUIRED)
+find_package(tf2_eigen REQUIRED)
+include_directories(${tf2_eigen_INCLUDE_DIRS})
 set(ROS_VERSION $ENV{ROS_VERSION})
 
 if(${ROS_VERSION} EQUAL 1)
