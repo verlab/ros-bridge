@@ -20,7 +20,7 @@ from ros_compatibility.node import CompatibleNode
 
 from carla_ackermann_control import carla_control_physics as phys
 
-from ackermann_msgs.msg import AckermannDrive  # pylint: disable=import-error,wrong-import-order
+from ackermann_msgs.msg import AckermannDriveStamped  # pylint: disable=import-error,wrong-import-order
 from std_msgs.msg import Header # pylint: disable=wrong-import-order
 from carla_msgs.msg import CarlaEgoVehicleStatus  # pylint: disable=no-name-in-module,import-error
 from carla_msgs.msg import CarlaEgoVehicleControl  # pylint: disable=no-name-in-module,import-error
@@ -55,7 +55,7 @@ class CarlaAckermannControl(CompatibleNode):
         # To prevent "float division by zero" within PID controller initialize it with
         # a previous point in time (the error happens because the time doesn't
         # change between initialization and first call, therefore dt is 0)
-        sys.modules['simple_pid.PID']._current_time = (       # pylint: disable=protected-access
+        sys.modules['simple_pid.pid']._current_time = (       # pylint: disable=protected-access
             lambda: self.get_time() - 0.1)
 
         # we might want to use a PID controller to reach the final target speed
@@ -71,7 +71,7 @@ class CarlaAckermannControl(CompatibleNode):
                                     output_limits=(-1, 1))
 
         # use the correct time for further calculations
-        sys.modules['simple_pid.PID']._current_time = (       # pylint: disable=protected-access
+        sys.modules['simple_pid.pid']._current_time = (       # pylint: disable=protected-access
             lambda: self.get_time())
 
         if ROS_VERSION == 1:
@@ -126,8 +126,8 @@ class CarlaAckermannControl(CompatibleNode):
 
         # ackermann drive commands
         self.control_subscriber = self.new_subscription(
-            AckermannDrive,
-            "/carla/" + self.role_name + "/ackermann_cmd",
+            AckermannDriveStamped,
+            "/ackermann_cmd",
             self.ackermann_command_updated,
             qos_profile=10
         )
@@ -294,10 +294,10 @@ class CarlaAckermannControl(CompatibleNode):
         """
         self.last_ackermann_msg_received_sec = self.get_time()
         # set target values
-        self.set_target_steering_angle(ros_ackermann_drive.steering_angle)
-        self.set_target_speed(ros_ackermann_drive.speed)
-        self.set_target_accel(ros_ackermann_drive.acceleration)
-        self.set_target_jerk(ros_ackermann_drive.jerk)
+        self.set_target_steering_angle(ros_ackermann_drive.drive.steering_angle)
+        self.set_target_speed(ros_ackermann_drive.drive.speed)
+        self.set_target_accel(ros_ackermann_drive.drive.acceleration)
+        self.set_target_jerk(ros_ackermann_drive.drive.jerk)
 
     def set_target_steering_angle(self, target_steering_angle):
         """
