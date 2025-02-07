@@ -75,7 +75,7 @@ class TFSensor(PseudoActor):
                 "TFSensor could not publish transform. Actor {} not found".format(self.parent.uid))
             return
 
-        self._tf_broadcaster.sendTransform(TransformStamped(
-            header=self.get_msg_header("odom", timestamp=timestamp),
-            child_frame_id=self.parent.get_prefix(),
-            transform=transform))
+        # self._tf_broadcaster.sendTransform(TransformStamped(
+        #     header=self.get_msg_header("odom", timestamp=timestamp),
+        #     child_frame_id=self.parent.get_prefix(),
+        #     transform=transform))
