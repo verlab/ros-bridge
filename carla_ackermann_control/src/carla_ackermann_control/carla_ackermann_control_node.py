@@ -475,8 +475,12 @@ class CarlaAckermannControl(CompatibleNode):
         # If the jerk input is big, then the trajectory input expects already quick changes
         # in the acceleration; to respect this we put an additional proportional factor on top
         self.info.status.accel_control_pedal_target = numpy.clip(
-            self.info.status.accel_control_pedal_target +
-            self.info.status.accel_control_pedal_delta,
+            (self.info.status.accel_control_pedal_target +
+            self.info.status.accel_control_pedal_delta),
+            -self.info.target.accel, self.info.target.accel)
+        self.info.status.accel_control_pedal_target = numpy.clip(
+            (self.info.status.accel_control_pedal_target +
+            self.info.status.accel_control_pedal_delta),
             -self.info.restrictions.max_pedal, self.info.restrictions.max_pedal)
 
     def update_drive_vehicle_control_command(self):
