@@ -12,7 +12,7 @@ Classes to handle Carla gnsss
 
 from carla_ros_bridge.sensor import Sensor
 
-from sensor_msgs.msg import NavSatFix
+from sensor_msgs.msg import NavSatFix, NavSatStatus
 
 
 class Gnss(Sensor):
@@ -70,4 +70,6 @@ class Gnss(Sensor):
         navsatfix_msg.latitude = carla_gnss_measurement.latitude
         navsatfix_msg.longitude = carla_gnss_measurement.longitude
         navsatfix_msg.altitude = carla_gnss_measurement.altitude
+        navsatfix_msg.status.status = NavSatStatus.STATUS_GBAS_FIX
+        navsatfix_msg.status.service = NavSatStatus.SERVICE_GPS
         self.gnss_publisher.publish(navsatfix_msg)
