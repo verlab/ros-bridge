@@ -509,8 +509,11 @@ class HUD(object):
                         pygame.draw.rect(display, (255, 255, 255), rect_border, 1)
                         f = (item[1] - item[2]) / (item[3] - item[2])
                         if item[2] < 0.0:
-                            rect = pygame.Rect((bar_h_offset + int(f * (bar_width - 6)), v_offset + 8),
-                                               (6, 6))
+                            try:
+                                rect = pygame.Rect((bar_h_offset + int(f * (bar_width - 6)), v_offset + 8),
+                                                (6, 6))
+                            except:
+                                pass
                         else:
                             rect = pygame.Rect((bar_h_offset, v_offset + 8),
                                                (int(f * bar_width), 6))
